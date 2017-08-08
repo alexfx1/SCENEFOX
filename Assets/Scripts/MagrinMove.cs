@@ -4,11 +4,29 @@ using UnityEngine;
 
 public class MagrinMove : MonoBehaviour {
 
+    public float velocidade = 1;
+    public List<Vector3> lista = new List<Vector3>();
+
+    int destino;
+
 	void Start () {
-		
-	}
-	
-	void Update () {
-		
-	}
+        destino = 0;
+        StartCoroutine("MoverAteProximoPonto");
+    }
+
+    IEnumerator MoverAteProximoPonto() {
+        transform.LookAt(lista[destino]);
+
+        while (transform.position != lista[destino]) { 
+            transform.position = Vector3.MoveTowards(transform.position, lista[destino], velocidade * Time.deltaTime);
+            yield return null;
+        }
+
+        destino++;
+        if (destino >= lista.Count) {
+            destino = 0;
+        }
+
+        StartCoroutine("MoverAteProximoPonto");
+    }
 }
